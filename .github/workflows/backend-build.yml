@@ -85,7 +85,6 @@ jobs:
 
       - name: Deployment + configmap + Service + Ingress
         run: |
-         sed -i 's@CONTAINER_IMAGE@'"$REGISTRY/flask-app:${{ github.sha }}"'@' k8s-yaml/backend/backend-deployment.yaml
          kubectl apply -f k8s-yaml/backend/configmap.yaml
          kubectl apply -f k8s-yaml/backend/service-account.yml
          kubectl apply -f k8s-yaml/backend/backend-deployment.yaml
