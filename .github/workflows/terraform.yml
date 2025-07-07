@@ -15,6 +15,7 @@ on:
         default: 'destroy'
         type: choice
         options:
+          - apply
           - destroy
 
 permissions:
@@ -54,19 +55,19 @@ jobs:
         id: validate
         run: terraform validate
         
-      - name: Terraform Init & Plan
-        run: |
-          terraform init
-          terraform plan
+      - name: Terraform Plan
+        run: terraform plan
           
-      - name: Terraform Apply
+      - name: Terraform Apply (commit message trigger)
         if: contains(github.event.head_commit.message, 'terraform apply')
-        run: terraform apply -auto-approve 
+        run: terraform apply -auto-approve
 
-      - name: Terraform Destroy
+      - name: Terraform Apply (workflow_dispatch)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply'
+        run: terraform apply -auto-approve
+
+      - name: Terraform Destroy (workflow_dispatch)
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
-        run: | 
+        run: |
           terraform destroy -target=module.helm -auto-approve
-          terraform destroy -auto-approve 
-      
- 
+          terraform destroy -auto-approve
