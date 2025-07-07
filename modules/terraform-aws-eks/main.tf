@@ -4,10 +4,10 @@ resource "aws_eks_cluster" "eks" {
   role_arn = var.cluster_role_arn
 
   vpc_config {
-    subnet_ids = var.public_subnets
+    subnet_ids         = var.public_subnets
     security_group_ids = var.security_group_ids
   }
-  
+
   # Enable EKS Cluster Control Plane Logging
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
@@ -38,7 +38,7 @@ resource "aws_eks_fargate_profile" "fargate_profile" {
   cluster_name           = aws_eks_cluster.eks.name
   fargate_profile_name   = "${var.name}-fp-app"
   pod_execution_role_arn = var.fargate_profile_role_arn
-  subnet_ids = var.private_subnets
+  subnet_ids             = var.private_subnets
   selector {
     namespace = var.namespace
   }
@@ -57,24 +57,24 @@ resource "aws_iam_openid_connect_provider" "oidc_provider" {
   url             = aws_eks_cluster.eks.identity[0].oidc[0].issuer
 
   tags = {
-      Name = "${var.name}-eks-irsa"
-    }
+    Name = "${var.name}-eks-irsa"
+  }
 }
 
 # Output: AWS IAM Open ID Connect Provider ARN
 output "aws_iam_openid_connect_provider_arn" {
   description = "AWS IAM Open ID Connect Provider ARN"
-  value = aws_iam_openid_connect_provider.oidc_provider.arn 
+  value       = aws_iam_openid_connect_provider.oidc_provider.arn
 }
 
 # Extract OIDC Provider from OIDC Provider ARN
 locals {
-    aws_iam_oidc_connect_provider_extract_from_arn = element(split("oidc-provider/", "${aws_iam_openid_connect_provider.oidc_provider.arn}"), 1)
+  aws_iam_oidc_connect_provider_extract_from_arn = element(split("oidc-provider/", "${aws_iam_openid_connect_provider.oidc_provider.arn}"), 1)
 }
 
 # Output: AWS IAM Open ID Connect Provider
 output "aws_iam_openid_connect_provider_extract_from_arn" {
   description = "AWS IAM Open ID Connect Provider extract from ARN"
-   value = local.aws_iam_oidc_connect_provider_extract_from_arn
+  value       = local.aws_iam_oidc_connect_provider_extract_from_arn
 }
 

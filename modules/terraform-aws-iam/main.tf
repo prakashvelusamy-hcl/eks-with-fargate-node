@@ -90,11 +90,11 @@ resource "aws_iam_policy" "lbc_iam_policy" {
   name        = "${var.name}-AWSLoadBalancerControllerIAMPolicy"
   path        = "/"
   description = "AWS Load Balancer Controller IAM Policy"
-  policy = data.http.lbc_iam_policy.response_body
+  policy      = data.http.lbc_iam_policy.response_body
 }
 
 output "lbc_iam_policy_arn" {
-  value = aws_iam_policy.lbc_iam_policy.arn 
+  value = aws_iam_policy.lbc_iam_policy.arn
 }
 
 ############################  Create IAM Role #############################################
@@ -114,10 +114,10 @@ resource "aws_iam_role" "lbc_iam_role" {
         }
         Condition = {
           StringEquals = {
-            "${var.aws_iam_openid_connect_provider_extract_from_arn}:aud": "sts.amazonaws.com",            
-            "${var.aws_iam_openid_connect_provider_extract_from_arn}:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+            "${var.aws_iam_openid_connect_provider_extract_from_arn}:aud" : "sts.amazonaws.com",
+            "${var.aws_iam_openid_connect_provider_extract_from_arn}:sub" : "system:serviceaccount:kube-system:aws-load-balancer-controller"
           }
-        }        
+        }
       },
     ]
   })
@@ -129,7 +129,7 @@ resource "aws_iam_role" "lbc_iam_role" {
 
 # Associate Load Balanacer Controller IAM Policy to  IAM Role
 resource "aws_iam_role_policy_attachment" "lbc_iam_role_policy_attach" {
-  policy_arn = aws_iam_policy.lbc_iam_policy.arn 
+  policy_arn = aws_iam_policy.lbc_iam_policy.arn
   role       = aws_iam_role.lbc_iam_role.name
 }
 
@@ -147,8 +147,8 @@ resource "aws_iam_role" "flask_irsa" {
       Action = "sts:AssumeRoleWithWebIdentity",
       Condition = {
         StringEquals = {
-          "${var.aws_iam_openid_connect_provider_extract_from_arn}:aud": "sts.amazonaws.com",            
-          "${var.aws_iam_openid_connect_provider_extract_from_arn}:sub": "system:serviceaccount:backend:flask-sa"
+          "${var.aws_iam_openid_connect_provider_extract_from_arn}:aud" : "sts.amazonaws.com",
+          "${var.aws_iam_openid_connect_provider_extract_from_arn}:sub" : "system:serviceaccount:backend:flask-sa"
         }
       }
     }]
@@ -173,21 +173,21 @@ resource "aws_iam_role_policy" "flask_secret_access" {
 ############################################## outputs #####################################################################
 output "lbc_iam_role_arn" {
   description = "AWS Load Balancer Controller IAM Role ARN"
-  value = aws_iam_role.lbc_iam_role.arn
+  value       = aws_iam_role.lbc_iam_role.arn
 }
 
 
 output "eks_cluster_role_arn" {
-    value = aws_iam_role.eks_role.arn
+  value = aws_iam_role.eks_role.arn
 }
 
 output "eks_node_role_arn" {
-    value = aws_iam_role.eks_node_role.arn
+  value = aws_iam_role.eks_node_role.arn
 }
 
 
 output "fargate_profile_role_arn" {
-    value = aws_iam_role.fargate_profile_role.arn
+  value = aws_iam_role.fargate_profile_role.arn
 }
 
 output "eks_role_depends_on" {

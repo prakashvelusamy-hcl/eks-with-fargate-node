@@ -1,0 +1,9 @@
+vpc_cidr_block              = "10.10.0.0/16"
+pub_sub_count               = 2
+nat_count                   = 1
+priv_sub_count              = 2
+name                        = "eks-fargate"
+region                      = "ap-south-1"
+db_username                 = "admin"
+database_name               = "eks-test"
+eks_oidc_root_ca_thumbprint = "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"

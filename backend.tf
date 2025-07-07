@@ -1,10 +1,9 @@
-  terraform {
+terraform {
   backend "s3" {
-    bucket = "terraform-remote-st"
-    key    = "eks-fargate/terraform.tfstate"
-    region = "us-east-1" 
- 
-    # For State Locking
-    #dynamodb_table = "terraform-locks"    
-  } 
-  } 
+    bucket  = "aws-state-s3"
+    key     = "hcl-usecase-eks-fargate-node/terraform.tfstate"
+    profile = "devops"
+    region  = "ap-south-1"
+    encrypt = true
+  }
+}

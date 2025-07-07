@@ -1,7 +1,11 @@
+data "aws_availability_zones" "az" {
+  state = "available"
+}
+
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_block
   tags = {
-    Name        = var.name
+    Name = var.name
   }
 }
 
@@ -9,7 +13,7 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name        = var.name
+    Name = var.name
   }
 }
 
@@ -17,9 +21,9 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "public" {
   count                   = 2
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet("10.0.0.0/20", 4, count.index)
+  cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, count.index)
   map_public_ip_on_launch = true
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  availability_zone       = element(data.aws_availability_zones.az.names, count.index)
   tags = {
     Name = "PublicSubnet-${count.index}"
   }
@@ -29,8 +33,8 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count             = 2
   vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet("10.0.16.0/20", 4, count.index)
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, count.index + 10)
+  availability_zone = element(data.aws_availability_zones.az.names, count.index)
   tags = {
     Name = "PrivateSubnet-${count.index}"
   }

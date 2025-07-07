@@ -14,28 +14,28 @@ variable "name" {
 }
 
 variable "cluster_role_arn" {
-    description = "cluster_role_arn"
-    type = string
+  description = "cluster_role_arn"
+  type        = string
 }
 
 variable "node_role_arn" {
-    description = "node_role_arn"
-    type = string
+  description = "node_role_arn"
+  type        = string
 }
 
 variable "security_group_ids" {
-    description = "security_group_ids"
-    type        = list(string)
+  description = "security_group_ids"
+  type        = list(string)
 }
 
 variable "cluster_role_dependency" {
-    description = "cluster_role_dependency"
-    type        = any
+  description = "cluster_role_dependency"
+  type        = any
 }
 
 variable "namespace_depends_on" {
-    description = "namespace_depends_on"
-    type        = any
+  description = "namespace_depends_on"
+  type        = any
 }
 
 variable "fargate_profile_role_arn" {

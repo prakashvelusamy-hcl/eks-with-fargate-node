@@ -49,7 +49,7 @@ output "node_group_public_arn" {
 
 output "node_group_public_status" {
   description = "Public Node Group status"
-  value       = aws_eks_node_group.node_group.status 
+  value       = aws_eks_node_group.node_group.status
 }
 
 output "node_group_public_version" {

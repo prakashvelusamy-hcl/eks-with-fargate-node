@@ -10,16 +10,61 @@
 
   <!-- Optional favicon / manifest if provided -->
   <link rel="icon" href="favicon.ico" />
-  <!-- If you have a manifest.json file, uncomment the line below -->
   <!-- <link rel="manifest" href="manifest.json" /> -->
 
   <meta name="theme-color" content="#1976d2" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #ffffff);
+      color: #333;
+    }
+
+    #root {
+      min-height: 100vh;
+    }
+
+    /* Loader while React loads */
+    .loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1976d2;
+    }
+
+    noscript {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-  <!-- React app gets injected here -->
-  </body>
+  <div class="loader" id="loader">Loading Employee Directory...</div>
+  <div id="root" style="display: none;"></div>
+
+  <script>
+    // Hide loader once React is mounted
+    window.addEventListener("DOMContentLoaded", () => {
+      const root = document.getElementById("root");
+      const loader = document.getElementById("loader");
+      if (root && loader) {
+        loader.style.display = "none";
+        root.style.display = "block";
+      }
+    });
+  </script>
+</body>
 
 </html>
