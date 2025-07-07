@@ -1,4 +1,5 @@
 name: Build and Push to ECR frontend
+
 on:
   push:
     paths:
@@ -12,10 +13,13 @@ permissions:
   contents: read
 
 jobs:
-  build-push-APi-react:
+  build-push-react-app:
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ap-south-1
+
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials with OIDC
@@ -23,27 +27,31 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::495599733393:role/OIDC
           role-session-name: github-assume
-          aws-region: ap-south-1
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR # login ecr
+      - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker Image 
+      - name: Get ECR registry URI
+        id: get-registry
         run: |
-          docker build -t ${{ vars.ECR_REGISTRY }}/react-app:${{ github.sha }} ./frontend
-          docker tag ${{ vars.ECR_REGISTRY }}/react-app:${{ github.sha }} ${{ vars.ECR_REGISTRY }}/react-app:latest
+          ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+          echo "REGISTRY=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_ENV
 
-      - name: Push Docker Image 
+      - name: Build React Docker Image
         run: |
-          docker push ${{ vars.ECR_REGISTRY }}/react-app:${{ github.sha }}
-          docker push ${{ vars.ECR_REGISTRY }}/react-app:latest
+          docker build -t $REGISTRY/react-app:${{ github.sha }} ./frontend
+          docker tag $REGISTRY/react-app:${{ github.sha }} $REGISTRY/react-app:latest
 
-     
-  
+      - name: Push React Docker Image
+        run: |
+          docker push $REGISTRY/react-app:${{ github.sha }}
+          docker push $REGISTRY/react-app:latest
+
   deploy:
     name: Deploy App and ALB Ingress
-    needs: build-push-APi-react  # Optional: Run sequentially after job1
+    needs: build-push-react-app
     runs-on: ubuntu-latest
 
     env:
