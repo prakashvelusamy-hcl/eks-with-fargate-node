@@ -1,5 +1,4 @@
 name: Build and Push to ECR frontend
-
 on:
   push:
     paths:
@@ -78,7 +77,7 @@ jobs:
 
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --region ap-south-1 --name demo6-eks
+          aws eks update-kubeconfig --region ap-south-1 --name eks-fargate-eks
 
       - name: Verify Cluster Access
         run: |
@@ -87,7 +86,7 @@ jobs:
 
       - name: Deployment + Service + Ingress
         run: |
-         sed -i 's@CONTAINER_IMAGE@'"${{ vars.ECR_REGISTRY }}/react-app:${{ github.sha }}"'@' k8s-yaml/frontend/deployment/frontend-deployment.yaml
+         sed -i 's@CONTAINER_IMAGE@'"$REGISTRY/react-app:${{ github.sha }}"'@' k8s-yaml/frontend/deployment/frontend-deployment.yaml
          kubectl apply -f k8s-yaml/frontend/deployment/frontend-deployment.yaml
          kubectl apply -f k8s-yaml/frontend/deployment/ingress-frontend.yaml
 
