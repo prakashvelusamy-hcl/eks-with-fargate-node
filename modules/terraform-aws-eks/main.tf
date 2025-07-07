@@ -36,7 +36,7 @@ resource "aws_eks_node_group" "node_group" {
 # Resource: EKS Fargate Profile
 resource "aws_eks_fargate_profile" "fargate_profile" {
   cluster_name           = aws_eks_cluster.eks.name
-  fargate_profile_name   = "${var.name}-fp-app"
+  fargate_profile_name   = "flask-app"
   pod_execution_role_arn = var.fargate_profile_role_arn
   subnet_ids             = var.private_subnets
   selector {
