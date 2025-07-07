@@ -43,7 +43,7 @@ RETRY_DELAY_SECS = int(os.getenv("DB_CONN_DELAY", 3))
 def _load_rds_secret() -> dict:
     """Fetch JSON secret from Secrets Manager using secret name."""
     secret_name = os.environ.get("DB_SECRET_NAME")
-    region      = os.environ.get("AWS_REGION", "us-east-1")
+    region      = os.environ.get("AWS_REGION", "ap-south-1")
 
     if not secret_name:
         raise RuntimeError("DB_SECRET_NAME env var not set in backend pod")
