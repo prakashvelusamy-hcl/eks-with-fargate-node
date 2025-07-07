@@ -82,7 +82,23 @@ jobs:
       - name: Verify Cluster Access
         run: |
           kubectl get nodes
-                
+      - name: Add IAM user 'prakash' to aws-auth configmap
+        run: |
+          kubectl get configmap aws-auth -n kube-system -o yaml > aws-auth.yaml
+      
+          cat <<EOF >> mapUsers-patch.yaml
+          mapUsers: |
+            - userarn: arn:aws:iam::495599733393:user/prakash
+              username: prakash
+              groups:
+                - system:masters
+          EOF
+      
+          # Merge the patch (skip duplicates)
+          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' aws-auth.yaml mapUsers-patch.yaml > aws-auth-updated.yaml
+      
+          kubectl apply -f aws-auth-updated.yaml
+
 
       - name: Deployment + Service + Ingress
         run: |
