@@ -9,7 +9,7 @@ module "vpc" {
 }
 
 module "iam" {
-  source                                           = "./modules/terrafrom-aws-iam"
+  source                                           = "./modules/terraform-aws-iam"
   name                                             = var.name
   aws_iam_openid_connect_provider_arn              = module.eks.aws_iam_openid_connect_provider_arn
   aws_iam_openid_connect_provider_extract_from_arn = module.eks.aws_iam_openid_connect_provider_extract_from_arn

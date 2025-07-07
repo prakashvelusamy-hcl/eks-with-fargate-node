@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "subnet_group" {
-  name       = "aurora-subnet-group"
+  name       = "db-subnet-group"
   subnet_ids = var.private_subnets
 }
 
