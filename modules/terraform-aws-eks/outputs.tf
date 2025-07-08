@@ -24,7 +24,9 @@ output "cluster_version" {
   value       = aws_eks_cluster.eks.version
 }
 
-
+output "eks_oidc_root_ca_thumbprint" {
+  value = data.tls_certificate.oidc.certificates[0].sha1_fingerprint
+}
 
 output "cluster_oidc_issuer_url" {
   description = "The URL on the EKS cluster OIDC Issuer"
