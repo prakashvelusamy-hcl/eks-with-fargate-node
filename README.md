@@ -125,3 +125,22 @@ POST	/api/employees	Add new employee
 PUT	/api/employees	Update own info
 DELETE	/api/employees	Delete profile
 POST	/api/login	Authenticate user
+
+
+
+
+    grafana:
+      enabled: true
+      adminPassword: "admin"
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-type: "external"
+          service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+          service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+        port: 80
+        targetPort: 3000
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: 300m

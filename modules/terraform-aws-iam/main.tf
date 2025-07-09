@@ -1,6 +1,6 @@
 ############################################## IAM Role for EKS Cluster ################################################
 resource "aws_iam_role" "eks_role" {
-  name = "eksClusterRole"
+  name_prefix = "eksClusterRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -20,7 +20,7 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 
 ######################################## IAM Role for EKS Node Group #####################################################
 resource "aws_iam_role" "eks_node_role" {
-  name = "eksNodeGroupRole"
+  name_prefix = "eksNodeGroupRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -50,7 +50,7 @@ resource "aws_iam_role_policy_attachment" "ecr_read_only" {
 
 ####################################### IAM Role for EKS Fargate Profile ########################################################
 resource "aws_iam_role" "fargate_profile_role" {
-  name = "${var.name}-eks-fargate-profile-role-apps"
+  name_prefix = "${var.name}-fargate-profile-role"
 
   assume_role_policy = jsonencode({
     Statement = [{
@@ -99,7 +99,7 @@ output "lbc_iam_policy_arn" {
 
 ############################  Create IAM Role #############################################
 resource "aws_iam_role" "lbc_iam_role" {
-  name = "${var.name}-lbc-iam-role"
+  name_prefix = "${var.name}-lbc-iam-role"
 
   # Terraform's "jsonencode" function converts a Terraform expression result to valid JSON syntax.
   assume_role_policy = jsonencode({
